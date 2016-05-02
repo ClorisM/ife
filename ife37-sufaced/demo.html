@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>浮出层</title>
+<style type="text/css">
+*{
+margin:0;
+padding:0;
+}
+body{
+text-align:center;}
+.bg{
+width:100%;
+height:100%;
+position:absolute;
+z-index:-1;
+}
+.btn{
+height:30px;
+width:100px;
+margin:300px auto;
+margin-left:100px;
+}
+.promptPage{
+width:300px;
+height:200px;
+position:fixed;
+top:50%;
+margin-top:-100px;
+left:50%;
+margin-left:-150px;
+border:1px solid #CCCCCC;
+display:none;
+background-color:#FFFFFF;
+}
+.promptPage-title{
+text-align:center;
+height 30px;
+line-height:30px;
+border:1px solid #E8E8E8;
+background-color:#CCCCCC;
+cursor:move;
+}
+.promptPage button{
+margin-top:10px;
+}
+#pPbg{
+z-index:-1;
+width:100%;
+height:100%;
+position:fixed;
+left:0;
+top:0;
+background-color: rgba(0,0,0,0.15);
+}
+
+</style>
+<script type="text/javascript" >
+window.onload=function(){
+var pP=document.getElementById("promptPage");
+var bg=document.getElementById("bg");
+var btn=document.getElementById("btn");
+
+  //点击按钮显示面板和蒙层
+    btn.onclick=function(){
+    var pPbg=document.createElement("div"); 
+	document.body.appendChild(pPbg);
+	pPbg.id="pPbg";
+	 pP.style.display="block";
+    }
+	//点击关闭按钮面板和蒙层消失
+ var cl=document.getElementById("close");
+    cl.onclick=function(){
+    pP.style.display="none";
+	document.body.removeChild(pPbg);
+    }
+   //拖拽事件
+ var X=Y=0;
+  var isdraging=false;//判断是否可以拖拽
+  var title=document.getElementById("promptPage-title");
+   //第一步鼠标按下计算初始位置
+   title.onmousedown=function(event){
+   var e=event||window.event;
+   X=e.clientX-pP.offsetLeft;
+   Y=e.clientY-pP.offsetTop;
+   isdraging=true;
+   //第二步鼠标移动时实时计算面板的位置
+   document.onmousemove=function(event){
+   var event=event||window.event;
+      var pagewidth=document.documentElement.clientwidth;
+      if(isdraging){
+	  pP.style.left=event.clientX-X+150+'px';//150和100是因为给面板设置了margin的
+	  pP.style.top=event.clientY-Y+100+'px';
+	  }  
+   }//第三步将判断标志设为false 不用判断标志位也可以这样document.onmousedown=null;document.onmousemove=null;
+   document.onmouseup=function(event){
+   	isdraging=false;
+   }
+   }
+ 
+ 
+}
+</script>
+</head>
+<body>
+<div class="bg" id="bg">
+<img src="img1.jpg" />
+</div>
+ <button class="btn" id="btn">点我试试</button>
+ <div class=promptPage id=promptPage>
+   <div class="promptPage-title" id="promptPage-title">准备好了吗？</div>
+   <button class="close" id="close">关闭</button>
+ </div>
+</body>
+</html>
